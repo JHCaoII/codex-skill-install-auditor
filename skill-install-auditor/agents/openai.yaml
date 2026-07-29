@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill 安装审计"
+  short_description: "安装前检测 CJK 字体、路径、依赖、安全及跨平台兼容风险"
+  default_prompt: "Use $skill-install-auditor to audit this Skill in staging before installing or enabling it."
+
+policy:
+  allow_implicit_invocation: true
