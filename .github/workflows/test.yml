@@ -17,11 +17,12 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+          cache-dependency-path: requirements-dev.txt
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m py_compile skill-install-auditor/scripts/audit_skill.py skill-install-auditor/scripts/manage_batch.py skill-install-auditor/tests/test_audit_skill.py
       - run: python skill-install-auditor/tests/test_audit_skill.py
