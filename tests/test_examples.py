@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 AUDITOR = ROOT / "skill-install-auditor" / "scripts" / "audit_skill.py"
 MANAGER = ROOT / "skill-install-auditor" / "scripts" / "manage_batch.py"
+RELEASE_CHECKER = ROOT / "tools" / "check_release.py"
 
 
 def run_audit(skill: Path, installed: Path, context: Path | None = None) -> tuple[int, dict]:
@@ -72,6 +73,25 @@ def main() -> None:
         assert "font-context-required" not in finding_codes, result
         assert "target-language-font-mismatch" not in finding_codes, result
         assert "target-platform-font-mismatch" not in finding_codes, result
+
+        hygiene_root = work / "hygiene"
+        (hygiene_root / ".git").mkdir(parents=True)
+        (hygiene_root / ".git" / "config").write_text(
+            "worktree = /" + "Users/runner/work/repository\n",
+            encoding="utf-8",
+        )
+        (hygiene_root / "public-note.txt").write_text(
+            "accidental path: /" + "Users/private-owner/Documents\n",
+            encoding="utf-8",
+        )
+        process = subprocess.run(
+            [sys.executable, str(RELEASE_CHECKER), str(hygiene_root)],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert "macOS user path found in public-note.txt" in process.stdout
+        assert ".git/config" not in process.stdout
 
     print("release example tests passed")
 
