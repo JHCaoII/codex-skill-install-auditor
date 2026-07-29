@@ -24,9 +24,9 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: python -m pip install -r requirements-dev.txt
+      - run: python tools/check_release.py .
       - run: python -m py_compile skill-install-auditor/scripts/audit_skill.py skill-install-auditor/scripts/manage_batch.py skill-install-auditor/tests/test_audit_skill.py
       - run: python skill-install-auditor/tests/test_audit_skill.py
       - run: python tests/test_examples.py
-      - run: python tools/check_release.py .
       - run: python skill-install-auditor/scripts/manage_batch.py set .ci/font-context.json --language zh-Hans --platform cross-platform
       - run: python skill-install-auditor/scripts/audit_skill.py skill-install-auditor --installed-root .ci/installed --font-context .ci/font-context.json --json
