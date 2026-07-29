@@ -89,6 +89,8 @@ def check(root: Path) -> list[str]:
 
     for path in root.rglob("*"):
         relative = path.relative_to(root)
+        if ".git" in relative.parts:
+            continue
         if path.name in UNWANTED_NAMES:
             errors.append(f"unwanted generated artifact: {relative}")
         if path.name.startswith(UNWANTED_PREFIXES):
